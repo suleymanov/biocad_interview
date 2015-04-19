@@ -1,29 +1,29 @@
 library(igraph)
-source("graph_funcs2.R")
+source("graph_funcs.R")
 
 # count <- 1500
-count <- 50
-n <- 15
+count <- 1500
+n <- 20
 set.seed(2015)
-gfs <- gen_seq_graphs(count, n, "dir", 0.5)
+gfs <- gen_seq_graphs(count, n, "undir", 0.3)
 
 print("Run standard procedure...")
+#print_isomorphs(gfs)
 print("Done standard procedure!")
-print_isomorphs(gfs)
 
 print("Run algorithm with kernel...")
 for (i in 1:(length(gfs) - 1)) {
-    k_ii <- kernel1(gfs[[i]], gfs[[i]], 3, "dir")
+    k_ii <- kernel1(gfs[[i]], gfs[[i]], 1, "undir")
     for (j in (i + 1):length(gfs)) {
         if (any((sort(gfs[[i]][[5]]) == sort(gfs[[j]][[5]])) == FALSE)) { next }
-        k_jj <- kernel1(gfs[[j]], gfs[[j]], 3, "dir")
+        k_jj <- kernel1(gfs[[j]], gfs[[j]], 1, "undir")
         if (k_ii == k_jj)
             print(c(i, j))
     }
 }
 
-gfs1 <- gen_seq_graphs(count - 15, n, "dir", 0.5)
-gfs2 <- sample(gfs1, 15)
+gfs1 <- gen_seq_graphs(count - 50, n, "undir", 0.3)
+gfs2 <- sample(gfs1, 50)
 gfs <- c(gfs1, gfs2)
 
 print("Run standard procedure...")
@@ -32,10 +32,10 @@ print("Done standard procedure!")
 
 print("Run algorithm with kernel...")
 for (i in 1:(length(gfs) - 1)) {
-    k_ii <- kernel1(gfs[[i]], gfs[[i]], 3, "dir")
+    k_ii <- kernel1(gfs[[i]], gfs[[i]], 2, "undir")
     for (j in (i + 1):length(gfs)) {
         if (any((sort(gfs[[i]][[5]]) == sort(gfs[[j]][[5]])) == FALSE)) { next }
-        k_jj <- kernel1(gfs[[j]], gfs[[j]], 3, "dir")
+        k_jj <- kernel1(gfs[[j]], gfs[[j]], 2, "undir")
         if (k_ii == k_jj)
             print(c(i, j))
     }
