@@ -13,7 +13,7 @@ We begin with loading graph library and some useful functions:
 
 ```{r}
 library(igraph)
-source("graph_funcs.R")
+source("graph_funcs2.R")
 ```
 
 Then we generate 20 graphs, each consisting of 4 nodes, with probability of 0.5 of having and edge between any arbitrary edges. We will also define uniform initial and stopping probabilities for all graphs and calculate direct product of those probabilities:
