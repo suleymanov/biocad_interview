@@ -58,7 +58,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </div>
 
 
-<p>This document runs several tests for algorithm that finds indices of non-isomorphic graphs. Each test result will be written to 2 files - one for result, and one for reference solution.</p>
+<p>This document runs several tests for algorithm that finds indices of non-isomorphic graphs. Each test result will be written to 2 files - one for result, and one for reference solution. Two criteria are checked: lengths of sets of graphs indices and graph indices themselves. Double ‘TRUE’ declares successful test checking.</p>
 <p>Source code files are loaded first and random seed is set:</p>
 <pre class="r"><code>source(&quot;perform_task.R&quot;)
 set.seed(2015)</code></pre>
@@ -71,7 +71,10 @@ perform_task(gfs1, &quot;undir&quot;, c(&quot;20_4_undir (ref).csv&quot;, &quot;
 ## [1] &quot;Done with standard procedure!&quot;
 ## [1] &quot;&quot;
 ## [1] &quot;Running algorithm with kernel...&quot;
-## [1] &quot;Done!&quot;</code></pre>
+## [1] &quot;Done!&quot;
+## [1] &quot;Diagnosis: &quot;
+## [1] TRUE
+## [1] TRUE</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Second test: set of 20 directed graphs, each of 4 vertices:</li>
 </ol>
@@ -81,7 +84,88 @@ perform_task(gfs2, &quot;dir&quot;, c(&quot;20_4_dir (ref).csv&quot;, &quot;20_4
 ## [1] &quot;Done with standard procedure!&quot;
 ## [1] &quot;&quot;
 ## [1] &quot;Running algorithm with kernel...&quot;
-## [1] &quot;Done!&quot;</code></pre>
+## [1] &quot;Done!&quot;
+## [1] &quot;Diagnosis: &quot;
+## [1] TRUE
+## [1] TRUE</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Third test: set of 100 undirected graphs, each of 10 vertices:</li>
+</ol>
+<pre class="r"><code>gfs3 &lt;- gen_seq_graphs(100, 10, &quot;undir&quot;, 0.5)
+perform_task(gfs3, &quot;undir&quot;, c(&quot;100_10_undir (ref).csv&quot;, &quot;100_10_undir.csv&quot;))</code></pre>
+<pre><code>## [1] &quot;Running standard procedure...&quot;
+## [1] &quot;Done with standard procedure!&quot;
+## [1] &quot;&quot;
+## [1] &quot;Running algorithm with kernel...&quot;
+## [1] &quot;Done!&quot;
+## [1] &quot;Diagnosis: &quot;
+## [1] TRUE
+## [1] TRUE</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Third test: set of 100 directed graphs, each of 10 vertices:</li>
+</ol>
+<pre class="r"><code>gfs4 &lt;- gen_seq_graphs(100, 10, &quot;dir&quot;, 0.5)
+perform_task(gfs4, &quot;dir&quot;, c(&quot;100_10_dir (ref).csv&quot;, &quot;100_10_dir.csv&quot;))</code></pre>
+<pre><code>## [1] &quot;Running standard procedure...&quot;
+## [1] &quot;Done with standard procedure!&quot;
+## [1] &quot;&quot;
+## [1] &quot;Running algorithm with kernel...&quot;
+## [1] &quot;Done!&quot;
+## [1] &quot;Diagnosis: &quot;
+## [1] TRUE
+## [1] TRUE</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Test: set of 250 undirected graphs, each of 15 vertices:</li>
+</ol>
+<pre class="r"><code>gfs5 &lt;- gen_seq_graphs(250, 15, &quot;undir&quot;, 0.5)
+perform_task(gfs5, &quot;undir&quot;, c(&quot;250_15_undir (ref).csv&quot;, &quot;250_15_undir.csv&quot;))</code></pre>
+<pre><code>## [1] &quot;Running standard procedure...&quot;
+## [1] &quot;Done with standard procedure!&quot;
+## [1] &quot;&quot;
+## [1] &quot;Running algorithm with kernel...&quot;
+## [1] &quot;Done!&quot;
+## [1] &quot;Diagnosis: &quot;
+## [1] TRUE
+## [1] TRUE</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>Test: set of 250 directed graphs, each of 15 vertices:</li>
+</ol>
+<pre class="r"><code>gfs6 &lt;- gen_seq_graphs(250, 15, &quot;dir&quot;, 0.5)
+perform_task(gfs6, &quot;dir&quot;, c(&quot;250_15_dir (ref).csv&quot;, &quot;250_15_dir.csv&quot;))</code></pre>
+<pre><code>## [1] &quot;Running standard procedure...&quot;
+## [1] &quot;Done with standard procedure!&quot;
+## [1] &quot;&quot;
+## [1] &quot;Running algorithm with kernel...&quot;
+## [1] &quot;Done!&quot;
+## [1] &quot;Diagnosis: &quot;
+## [1] TRUE
+## [1] TRUE</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Test: set of 300 undirected graphs, each of 15 vertices, with lower connection probability:</li>
+</ol>
+<pre class="r"><code>gfs7 &lt;- gen_seq_graphs(300, 15, &quot;undir&quot;, 0.2)
+perform_task(gfs7, &quot;undir&quot;, c(&quot;300_15_undir (ref).csv&quot;, &quot;300_15_undir.csv&quot;))</code></pre>
+<pre><code>## [1] &quot;Running standard procedure...&quot;
+## [1] &quot;Done with standard procedure!&quot;
+## [1] &quot;&quot;
+## [1] &quot;Running algorithm with kernel...&quot;
+## [1] &quot;Done!&quot;
+## [1] &quot;Diagnosis: &quot;
+## [1] TRUE
+## [1] TRUE</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>Test: set of 300 directed graphs, each of 15 vertices, with lower connection probability:</li>
+</ol>
+<pre class="r"><code>gfs8 &lt;- gen_seq_graphs(300, 15, &quot;dir&quot;, 0.2)
+perform_task(gfs8, &quot;dir&quot;, c(&quot;300_15_dir (ref).csv&quot;, &quot;300_15_dir.csv&quot;))</code></pre>
+<pre><code>## [1] &quot;Running standard procedure...&quot;
+## [1] &quot;Done with standard procedure!&quot;
+## [1] &quot;&quot;
+## [1] &quot;Running algorithm with kernel...&quot;
+## [1] &quot;Done!&quot;
+## [1] &quot;Diagnosis: &quot;
+## [1] TRUE
+## [1] TRUE</code></pre>
 
 
 </div>

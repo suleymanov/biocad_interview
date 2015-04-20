@@ -31,6 +31,12 @@ gen_graph_undir <- function(n, prob) {
 
 # generates directed graph with 'n' nodes
 # given probability 'prob' of node of having edge with any other arbitrary node
+# Returns:
+#   - graph itself
+#   - graph adjacency matrix
+#   - transition matrix
+#   - initial probabilities distribution
+#   - stopping probabilities distribution
 gen_graph_dir <- function(n, prob) {
     entries <- sample(c(0, 1), n * (n - 1), replace = T, prob = c(1 - prob, prob))
     adj <- matrix(rep(0, n * n), nrow = n, byrow = T)
@@ -63,6 +69,7 @@ direct_product <- function(g1, g2, mode = c("dir", "undir")) {
     res <- list(g, m)
 }
 
+# kernel on two graphs direct product
 kernel1 <- function(g1, g2, k, mode = c("dir", "undir")) {
     g <- direct_product(g1, g2, mode)
     px <- kronecker(g1[[4]], g2[[4]])
@@ -72,6 +79,19 @@ kernel1 <- function(g1, g2, k, mode = c("dir", "undir")) {
     for (i in 1:k) {
         val <- val %*% g[[2]]
         s <- s + t(qx) %*% val %*% px
+    }
+    return (s)
+}
+
+kernel2 <- function(g, k, mode = c("dir", "undir")) {
+    p <- g[[4]]
+    q <- g[[5]]
+    P <- g[[3]]
+    s <- t(q) %*% p
+    val <- diag(rep(1, dim(P)[1]))
+    for (i in 1:k) {
+        val <- val %*% P
+        s <- s + t(q) %*% val %*% p
     }
     return (s)
 }
@@ -107,16 +127,20 @@ print_isomorphs <- function(gfs) {
 }
 
 # prints pairs of non-isomorphic graphs using standard methods
+# and write to file
 print_non_isomorphs <- function(gfs, fname) {
     ind <- 1
     v <- list()
+    v_ch <- list()
     for (i in 1:(length(gfs) - 1))
         for (j in (i + 1):length(gfs))
             if (!graph.isomorphic(gfs[[i]][[1]], gfs[[j]][[1]]))
             {
-                v[[ind]] <- paste("(", i, " ", j, ")", sep = "")
+                v[[ind]] <- c(i, j)
+                v_ch[[ind]] <- paste("(", i, " ", j, ")", sep = "")
                 ind <- ind + 1
             }
-    v <- as.character(v)
-    write(v, file = fname, append = F, sep = ",", ncolumns = 10)
+    v_ch <- as.character(v_ch)
+    write(v_ch, file = fname, append = F, sep = ",", ncolumns = 10)
+    return (v)
 }
