@@ -1,5 +1,4 @@
 library(igraph)
-# library(gputools)
 
 # generates undirected graph with 'n' nodes
 # given fraction 'prob' of all possible connections
@@ -11,12 +10,11 @@ gen_graph_undir <- function(n, prob) {
         beg <- ind
         end <- ind + (n - i) - 1
         row <- entries[beg:end]
-        for (j in 1:length(row)) {
+        for (j in 1:length(row))
             if (row[j] == 1) {
                 adj[i, j + i] <- 1
                 adj[j + i, i] <- 1
             }
-        }
         ind <- end + 1
     }
     grf <- graph.adjacency(adj, "undirected")
@@ -37,14 +35,12 @@ gen_graph_dir <- function(n, prob) {
     entries <- sample(c(0, 1), n * (n - 1), replace = T, prob = c(1 - prob, prob))
     adj <- matrix(rep(0, n * n), nrow = n, byrow = T)
     ind <- 1
-    for (i in 1:n) {
-        for (j in 1:n) {
+    for (i in 1:n)
+        for (j in 1:n)
             if (i != j) {
                 adj[i, j] <- entries[ind]
                 ind <- ind + 1
             }
-        }
-    }
     grf <- graph.adjacency(adj, "directed")
     p <- matrix(rep(1 / n, n), nrow = n)
     q <- p
@@ -52,8 +48,6 @@ gen_graph_dir <- function(n, prob) {
     rs <- rowSums(P); cs <- colSums(P)
     inds_r <- rs != 0; inds_c <- cs != 0
     P[, inds_r] <- t(P[inds_r, ] / rs[inds_r])
-    # fr <- 1 - sum(q[!inds_c])
-    # q[inds_c] <- fr * cs[inds_c] / sum(cs)
     fr <- 1 - sum(q[!inds_r])
     q[inds_r] <- fr * cs[inds_r] / sum(cs)
     res <- list(grf, adj, P, p, q)
@@ -77,12 +71,12 @@ kernel1 <- function(g1, g2, k, mode = c("dir", "undir")) {
     val <- diag(rep(1, dim(g[[2]])[1]))
     for (i in 1:k) {
         val <- val %*% g[[2]]
-        # val <- gpuMatMult(val, g[[2]])
         s <- s + t(qx) %*% val %*% px
     }
     return (s)
 }
 
+# small routine for debugging purposes
 print_k_kernels <- function(g1, g2, k, mode = c("dir", "undir")) {
     for (i in 1:k) {
         k11 <- kernel1(g1, g1, i, mode)
@@ -94,20 +88,35 @@ print_k_kernels <- function(g1, g2, k, mode = c("dir", "undir")) {
 
 # generates sequence of 'count' graphs with 'n' nodes
 gen_seq_graphs <- function(count, n, mode = c("dir", "undir"), prob) {
-    grfs <- list()
+    gfs <- list()
     if (mode == "dir")
         for (i in 1:count)
-            grfs[[i]] <- gen_graph_dir(n, prob)
+            gfs[[i]] <- gen_graph_dir(n, prob)
     else
         for (i in 1:count)
-            grfs[[i]] <- gen_graph_undir(n, prob)
-    grfs
+            gfs[[i]] <- gen_graph_undir(n, prob)
+    return (gfs)
 }
 
-# prints pairs of isomorphic graphs using standard methods
-print_isomorphs <- function(grfs) {
-    for (i in 1:(length(grfs) - 1)) 
-        for (j in (i + 1):length(grfs))
-            if (graph.isomorphic(grfs[[i]][[1]], grfs[[j]][[1]]))
+# prints pairs of isomorphic graphs using standard methods from 'igraph' package
+print_isomorphs <- function(gfs) {
+    for (i in 1:(length(gfs) - 1)) 
+        for (j in (i + 1):length(gfs))
+            if (graph.isomorphic(gfs[[i]][[1]], gfs[[j]][[1]]))
                 print(c(i, j))
+}
+
+# prints pairs of non-isomorphic graphs using standard methods
+print_non_isomorphs <- function(gfs, fname) {
+    ind <- 1
+    v <- list()
+    for (i in 1:(length(gfs) - 1))
+        for (j in (i + 1):length(gfs))
+            if (!graph.isomorphic(gfs[[i]][[1]], gfs[[j]][[1]]))
+            {
+                v[[ind]] <- paste("(", i, " ", j, ")", sep = "")
+                ind <- ind + 1
+            }
+    v <- as.character(v)
+    write(v, file = fname, append = F, sep = ",", ncolumns = 10)
 }

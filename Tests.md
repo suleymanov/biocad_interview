@@ -1,0 +1,45 @@
+# Some tests
+Rail Suleymanov  
+Monday, April 20, 2015  
+
+This document runs several tests for algorithm that finds indices of non-isomorphic graphs. Each test result will be written to 2 files - one for result, and one for reference solution.
+
+Source code files are loaded first and random seed is set:
+
+
+```r
+source("perform_task.R")
+set.seed(2015)
+```
+
+1) First test: set of 20 undirected graphs, each of 4 vertices:
+
+
+```r
+gfs1 <- gen_seq_graphs(20, 4, "undir", 0.5)
+perform_task(gfs1, "undir", c("20_4_undir (ref).csv", "20_4_undir.csv"))
+```
+
+```
+## [1] "Running standard procedure..."
+## [1] "Done with standard procedure!"
+## [1] ""
+## [1] "Running algorithm with kernel..."
+## [1] "Done!"
+```
+
+2) Second test: set of 20 directed graphs, each of 4 vertices:
+
+
+```r
+gfs2 <- gen_seq_graphs(20, 4, "dir", 0.5)
+perform_task(gfs2, "dir", c("20_4_dir (ref).csv", "20_4_dir.csv"))
+```
+
+```
+## [1] "Running standard procedure..."
+## [1] "Done with standard procedure!"
+## [1] ""
+## [1] "Running algorithm with kernel..."
+## [1] "Done!"
+```
